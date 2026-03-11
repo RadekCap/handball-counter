@@ -181,7 +181,7 @@
         <div class="subtitle">Handball Counter</div>
 
         <div class="next-training" id="next-training">
-            <span id="training-prefix">Pristi trenink: </span>
+            <span id="training-prefix">Příští trénink: </span>
             <span class="day-name" id="training-day"></span>
         </div>
 
@@ -204,13 +204,13 @@
             </div>
         </div>
 
-        <div class="training-info">Treninky: streda a patek v 16:00</div>
+        <div class="training-info">Tréninky: středa a pátek v 16:00</div>
     </div>
 
     <script>
         const DAY_NAMES = {
-            3: 'Streda v 16:00',
-            5: 'Patek v 16:00'
+            3: 'Středa v 16:00',
+            5: 'Pátek v 16:00'
         };
 
         const TRAINING_DAYS = [3, 5]; // Wednesday = 3, Friday = 5
@@ -277,7 +277,7 @@
         function getDayLabel(n) {
             if (n === 1) return 'den';
             if (n >= 2 && n <= 4) return 'dny';
-            return 'dni';
+            return 'dní';
         }
 
         function getHourLabel(n) {
