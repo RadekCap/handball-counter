@@ -18,18 +18,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             background: #ffffff;
             color: #303030;
             font-family: 'Open Sans', sans-serif;
-            overflow: hidden;
             position: relative;
         }
 
         /* Handball court lines background */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -42,7 +40,7 @@
 
         body::after {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -57,6 +55,8 @@
             text-align: center;
             z-index: 1;
             padding: 2rem;
+            max-width: 800px;
+            width: 100%;
         }
 
         .title {
@@ -75,6 +75,15 @@
             letter-spacing: 2px;
         }
 
+        .section-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #707070;
+            margin-bottom: 0.5rem;
+        }
+
         .next-training {
             font-family: 'Russo One', sans-serif;
             font-size: 1.4rem;
@@ -84,6 +93,23 @@
 
         .next-training .day-name {
             color: #df0000;
+        }
+
+        .next-match {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1.1rem;
+            color: #303030;
+            margin-bottom: 0.3rem;
+        }
+
+        .next-match .match-teams {
+            color: #df0000;
+        }
+
+        .match-detail {
+            font-size: 0.85rem;
+            color: #707070;
+            margin-bottom: 2rem;
         }
 
         .countdown {
@@ -122,6 +148,15 @@
             color: #707070;
         }
 
+        .countdown-small .countdown-item {
+            min-width: 70px;
+            padding: 1rem 0.7rem;
+        }
+
+        .countdown-small .countdown-value {
+            font-size: 2.5rem;
+        }
+
         .club-logo {
             width: 120px;
             height: auto;
@@ -133,6 +168,68 @@
             font-size: 0.85rem;
             color: #afafaf;
             letter-spacing: 1px;
+        }
+
+        .divider {
+            width: 60%;
+            margin: 2.5rem auto;
+            border: none;
+            border-top: 2px solid rgba(223, 0, 0, 0.1);
+        }
+
+        /* Schedule table */
+        .schedule-section {
+            margin-top: 1rem;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .schedule-table th {
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #707070;
+            padding: 0.6rem 0.4rem;
+            border-bottom: 2px solid #df0000;
+            text-align: left;
+        }
+
+        .schedule-table td {
+            padding: 0.5rem 0.4rem;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .schedule-table tr:hover {
+            background: #fdf5f5;
+        }
+
+        .schedule-table tr.past-match {
+            opacity: 0.4;
+        }
+
+        .schedule-table tr.next-match-row {
+            background: #fff5f5;
+            font-weight: 700;
+        }
+
+        .schedule-table .home-badge {
+            display: inline-block;
+            background: #df0000;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+            letter-spacing: 0.5px;
         }
 
         .pulse {
@@ -155,8 +252,25 @@
             .countdown-value {
                 font-size: 2.5rem;
             }
+            .countdown-small .countdown-item {
+                min-width: 55px;
+                padding: 0.7rem 0.4rem;
+            }
+            .countdown-small .countdown-value {
+                font-size: 1.8rem;
+            }
             .next-training {
                 font-size: 1.1rem;
+            }
+            .next-match {
+                font-size: 0.95rem;
+            }
+            .schedule-table {
+                font-size: 0.75rem;
+            }
+            .schedule-table th,
+            .schedule-table td {
+                padding: 0.4rem 0.25rem;
             }
         }
     </style>
@@ -164,14 +278,14 @@
 <body>
     <div class="container">
         <img src="https://1nhbrno.cz/photo/xmax6.png" alt="1. NH Brno" class="club-logo">
-        <div class="subtitle">Handball Counter</div>
 
+        <div class="section-title">Trénink</div>
         <div class="next-training" id="next-training">
             <span id="training-prefix">Příští trénink: </span>
             <span class="day-name" id="training-day"></span>
         </div>
 
-        <div class="countdown" id="countdown">
+        <div class="countdown" id="countdown-training">
             <div class="countdown-item">
                 <div class="countdown-value" id="days">--</div>
                 <div class="countdown-label" id="days-label">dny</div>
@@ -191,16 +305,73 @@
         </div>
 
         <div class="training-info">Tréninky: středa a pátek v 16:00</div>
-        <div class="training-info">Rozpisy zápasů ještě nejsou známy 😢</div>
+
+        <hr class="divider">
+
+        <div class="section-title">Zápas</div>
+        <div class="next-match" id="next-match-info">
+            <span id="match-teams" class="match-teams"></span>
+        </div>
+        <div class="match-detail" id="match-detail"></div>
+
+        <div class="countdown countdown-small" id="countdown-match">
+            <div class="countdown-item">
+                <div class="countdown-value" id="m-days">--</div>
+                <div class="countdown-label" id="m-days-label">dny</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="m-hours">--</div>
+                <div class="countdown-label" id="m-hours-label">hodiny</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="m-minutes">--</div>
+                <div class="countdown-label" id="m-minutes-label">minuty</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value pulse" id="m-seconds">--</div>
+                <div class="countdown-label" id="m-seconds-label">sekundy</div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="schedule-section">
+            <div class="section-title">Rozpis zápasů JARO 2025/2026</div>
+            <table class="schedule-table" id="schedule-table">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Den</th>
+                        <th>Čas</th>
+                        <th>Domácí - Hosté</th>
+                    </tr>
+                </thead>
+                <tbody id="schedule-body">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
+        // ── Match schedule data ──
+        const MATCHES = [
+            { date: '2026-04-12', time: '13:45', day: 'neděle', home: 'TJ Olbramovice', away: '1. NH BRNO' },
+            { date: '2026-04-26', time: '13:45', day: 'neděle', home: '1. NH BRNO', away: 'TJ Sokol Vracov' },
+            { date: '2026-05-17', time: '08:00', day: 'neděle', home: 'TJ Jiskra Humpolec A', away: '1. NH BRNO' },
+            { date: '2026-05-17', time: '11:45', day: 'neděle', home: 'TJ Jiskra Humpolec B', away: '1. NH BRNO' },
+            { date: '2026-05-24', time: '13:15', day: 'neděle', home: 'Draken Brno A', away: '1. NH BRNO' },
+            { date: '2026-05-24', time: '15:30', day: 'neděle', home: 'Draken Brno B', away: '1. NH BRNO' },
+            { date: '2026-05-30', time: '10:15', day: 'sobota', home: 'TJ Miroslav', away: '1. NH BRNO' },
+            { date: '2026-06-07', time: '12:00', day: 'neděle', home: 'SK Autonot Jihlava', away: '1. NH BRNO' },
+        ];
+
+        // ── Training countdown logic ──
         const DAY_NAMES = {
             3: 'Středa v 16:00',
             5: 'Pátek v 16:00'
         };
 
-        const TRAINING_DAYS = [3, 5]; // Wednesday = 3, Friday = 5
+        const TRAINING_DAYS = [3, 5];
         const TRAINING_HOUR = 16;
 
         function getNextTraining() {
@@ -237,7 +408,7 @@
             return { target, pragueNow, dayName: DAY_NAMES[targetDay] };
         }
 
-        function updateCountdown() {
+        function updateTrainingCountdown() {
             const { target, pragueNow, dayName } = getNextTraining();
 
             const diff = target - pragueNow;
@@ -261,6 +432,108 @@
             document.getElementById('seconds-label').textContent = getSecondLabel(seconds);
         }
 
+        // ── Match countdown logic ──
+        function getMatchDateTime(match) {
+            const [h, m] = match.time.split(':').map(Number);
+            const d = new Date(match.date + 'T00:00:00');
+            d.setHours(h, m, 0, 0);
+            return d;
+        }
+
+        function getNextMatch() {
+            const now = new Date();
+            const pragueNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
+
+            for (const match of MATCHES) {
+                const matchTime = getMatchDateTime(match);
+                if (matchTime > pragueNow) {
+                    return { match, matchTime, pragueNow };
+                }
+            }
+            return null;
+        }
+
+        function updateMatchCountdown() {
+            const result = getNextMatch();
+            if (!result) {
+                document.getElementById('match-teams').textContent = 'Sezóna skončila';
+                document.getElementById('match-detail').textContent = '';
+                document.getElementById('countdown-match').style.display = 'none';
+                return;
+            }
+
+            const { match, matchTime, pragueNow } = result;
+
+            const teamsText = match.home + ' - ' + match.away;
+            document.getElementById('match-teams').textContent = teamsText;
+
+            const dateFormatted = matchTime.toLocaleDateString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            document.getElementById('match-detail').textContent = match.day + ' ' + dateFormatted + ' v ' + match.time;
+
+            const diff = matchTime - pragueNow;
+            const totalSeconds = Math.floor(diff / 1000);
+            const days = Math.floor(totalSeconds / 86400);
+            const hours = Math.floor((totalSeconds % 86400) / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            document.getElementById('m-days').textContent = days;
+            document.getElementById('m-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('m-minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('m-seconds').textContent = String(seconds).padStart(2, '0');
+
+            document.getElementById('m-days-label').textContent = getDayLabel(days);
+            document.getElementById('m-hours-label').textContent = getHourLabel(hours);
+            document.getElementById('m-minutes-label').textContent = getMinuteLabel(minutes);
+            document.getElementById('m-seconds-label').textContent = getSecondLabel(seconds);
+        }
+
+        // ── Schedule table ──
+        function renderSchedule() {
+            const now = new Date();
+            const pragueNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
+            const nextMatch = getNextMatch();
+            const tbody = document.getElementById('schedule-body');
+
+            MATCHES.forEach(match => {
+                const matchTime = getMatchDateTime(match);
+                const isPast = matchTime <= pragueNow;
+                const isNext = nextMatch && match.date === nextMatch.match.date && match.time === nextMatch.match.time;
+                const isHome = match.home === '1. NH BRNO';
+
+                const tr = document.createElement('tr');
+                if (isPast) tr.classList.add('past-match');
+                if (isNext) tr.classList.add('next-match-row');
+
+                const dateFormatted = matchTime.toLocaleDateString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+                const tdDate = document.createElement('td');
+                tdDate.textContent = dateFormatted;
+                tr.appendChild(tdDate);
+
+                const tdDay = document.createElement('td');
+                tdDay.textContent = match.day;
+                tr.appendChild(tdDay);
+
+                const tdTime = document.createElement('td');
+                tdTime.textContent = match.time;
+                tr.appendChild(tdTime);
+
+                const tdTeams = document.createElement('td');
+                tdTeams.textContent = match.home + ' - ' + match.away;
+                if (isHome) {
+                    const badge = document.createElement('span');
+                    badge.className = 'home-badge';
+                    badge.textContent = 'DOMA';
+                    tdTeams.appendChild(badge);
+                }
+                tr.appendChild(tdTeams);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ── Czech labels ──
         function getDayLabel(n) {
             if (n === 1) return 'den';
             if (n >= 2 && n <= 4) return 'dny';
@@ -285,8 +558,14 @@
             return 'sekund';
         }
 
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        // ── Init ──
+        updateTrainingCountdown();
+        updateMatchCountdown();
+        renderSchedule();
+        setInterval(() => {
+            updateTrainingCountdown();
+            updateMatchCountdown();
+        }, 1000);
     </script>
 </body>
 </html>
