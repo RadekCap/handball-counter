@@ -350,6 +350,11 @@
         const TRAINING_DAYS = [3, 5];
         const TRAINING_HOUR = 16;
 
+        // Dates to skip (no training on these days)
+        const SKIP_TRAINING_DATES = [
+            '2026-04-03', // pátek - odpadá
+        ];
+
         function getNextTraining() {
             const now = new Date();
             const pragueNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
@@ -361,7 +366,7 @@
 
             let daysUntil = null;
 
-            for (let offset = 0; offset <= 7; offset++) {
+            for (let offset = 0; offset <= 14; offset++) {
                 const targetDay = (currentDay + offset) % 7;
                 if (TRAINING_DAYS.includes(targetDay)) {
                     if (offset === 0) {
@@ -370,6 +375,14 @@
                             (currentHour === TRAINING_HOUR && currentMinute === 0 && currentSecond > 0);
                         if (pastTraining) continue;
                     }
+                    // Check if this date is in the skip list
+                    const candidateDate = new Date(pragueNow);
+                    candidateDate.setDate(candidateDate.getDate() + offset);
+                    const dateStr = candidateDate.getFullYear() + '-' +
+                        String(candidateDate.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(candidateDate.getDate()).padStart(2, '0');
+                    if (SKIP_TRAINING_DATES.includes(dateStr)) continue;
+
                     daysUntil = offset;
                     break;
                 }
