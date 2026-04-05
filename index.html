@@ -348,12 +348,16 @@
             color: #303030;
             white-space: nowrap;
             margin-left: 0.5rem;
+            min-width: 3.5rem;
+            text-align: right;
         }
 
         .match-result .half {
             font-size: 0.65rem;
             color: #afafaf;
             margin-left: 0.3rem;
+            min-width: 3rem;
+            text-align: left;
         }
 
         .match-result.our-match {
@@ -467,11 +471,15 @@
                 font-size: 0.95rem;
             }
             .schedule-table {
-                font-size: 0.75rem;
+                font-size: 0.68rem;
             }
             .schedule-table th,
             .schedule-table td {
-                padding: 0.4rem 0.25rem;
+                padding: 0.4rem 0.2rem;
+                white-space: nowrap;
+            }
+            .schedule-table td:last-child {
+                white-space: normal;
             }
         }
     </style>
