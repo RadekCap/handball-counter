@@ -222,6 +222,175 @@
             text-decoration: underline;
         }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+            border-bottom: 2px solid #df0000;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.7rem 0.5rem;
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #707070;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #df0000;
+            color: #fff;
+        }
+
+        .tab-btn:not(.active):hover {
+            background: #eee;
+        }
+
+        .tab-content {
+            display: none;
+            padding-top: 1rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Standings table */
+        .standings-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+
+        .standings-table th {
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #707070;
+            padding: 0.5rem 0.3rem;
+            border-bottom: 2px solid #df0000;
+            text-align: center;
+        }
+
+        .standings-table th:nth-child(2) {
+            text-align: left;
+        }
+
+        .standings-table td {
+            padding: 0.45rem 0.3rem;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .standings-table td:nth-child(2) {
+            text-align: left;
+        }
+
+        .standings-table tr:hover {
+            background: #fdf5f5;
+        }
+
+        .standings-table tr.our-team {
+            background: #fff5f5;
+            font-weight: 700;
+        }
+
+        .standings-table tr.our-team td {
+            color: #df0000;
+        }
+
+        .standings-note {
+            font-size: 0.7rem;
+            color: #afafaf;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        /* Match results in tabs */
+        .round-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.8rem;
+            color: #707070;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 1.2rem 0 0.4rem;
+            text-align: left;
+        }
+
+        .round-title:first-child {
+            margin-top: 0;
+        }
+
+        .match-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.78rem;
+        }
+
+        .match-result .teams {
+            flex: 1;
+            text-align: left;
+        }
+
+        .match-result .score {
+            font-family: 'Russo One', sans-serif;
+            color: #303030;
+            white-space: nowrap;
+            margin-left: 0.5rem;
+        }
+
+        .match-result .half {
+            font-size: 0.65rem;
+            color: #afafaf;
+            margin-left: 0.3rem;
+        }
+
+        .match-result.our-match {
+            background: #fff8f8;
+        }
+
+        .match-result.our-match .teams {
+            font-weight: 700;
+            color: #df0000;
+        }
+
+        .match-result .future {
+            color: #afafaf;
+            font-style: italic;
+        }
+
+        @media (max-width: 500px) {
+            .tab-btn {
+                font-size: 0.65rem;
+                padding: 0.6rem 0.3rem;
+                letter-spacing: 0.5px;
+            }
+            .standings-table {
+                font-size: 0.7rem;
+            }
+            .standings-table th {
+                font-size: 0.6rem;
+                padding: 0.4rem 0.2rem;
+            }
+            .standings-table td {
+                padding: 0.35rem 0.2rem;
+            }
+            .match-result {
+                font-size: 0.72rem;
+            }
+        }
+
         .pulse {
             animation: pulse 2s ease-in-out infinite;
         }
@@ -343,9 +512,154 @@
 
         <hr class="divider">
 
-        <a href="http://www.nhjmp.hys.cz/index.php?lvla=4&lvlb=1&lvlc=6" target="_blank" class="table-link">
-            Jihomoravský oblastní přebor - Starší žákyně
-        </a>
+        <div class="section-title">Tabulka a výsledky</div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('standings')">Tabulka</button>
+            <button class="tab-btn" onclick="switchTab('podzim')">Podzim</button>
+            <button class="tab-btn" onclick="switchTab('jaro')">Jaro</button>
+        </div>
+
+        <div id="tab-standings" class="tab-content active">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tým</th>
+                        <th>Z</th>
+                        <th>V</th>
+                        <th>R</th>
+                        <th>P</th>
+                        <th>Skóre</th>
+                        <th>B</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1.</td><td>TJ Sokol Vracov</td><td>5</td><td>5</td><td>0</td><td>0</td><td>112:35</td><td>10</td></tr>
+                    <tr><td>2.</td><td>Draken Brno "A"</td><td>6</td><td>5</td><td>0</td><td>1</td><td>149:67</td><td>10</td></tr>
+                    <tr><td>3.</td><td>TJ Miroslav</td><td>5</td><td>4</td><td>0</td><td>1</td><td>76:41</td><td>8</td></tr>
+                    <tr><td>4.</td><td>TJ Jiskra Humpolec "A"</td><td>6</td><td>3</td><td>0</td><td>3</td><td>66:74</td><td>6</td></tr>
+                    <tr><td>5.</td><td>TJ Olbramovice</td><td>6</td><td>2</td><td>0</td><td>4</td><td>76:91</td><td>4</td></tr>
+                    <tr><td>6.</td><td>SK Autonot Jihlava</td><td>6</td><td>1</td><td>0</td><td>5</td><td>60:119</td><td>2</td></tr>
+                    <tr class="our-team"><td>7.</td><td>1. NH BRNO</td><td>6</td><td>0</td><td>0</td><td>6</td><td>40:152</td><td>0</td></tr>
+                </tbody>
+            </table>
+            <div class="standings-note">Tabulka bez družstev "B" — rozhoduje o postupu a medailích</div>
+        </div>
+
+        <div id="tab-podzim" class="tab-content">
+            <div class="round-title">Předehrávky</div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - Draken Brno "B"</span><span class="score">25:10</span><span class="half">(14:4)</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - TJ Jiskra Humpolec "B"</span><span class="score">22:8</span><span class="half">(14:4)</span></div>
+
+            <div class="round-title">1. kolo</div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - TJ Miroslav</span><span class="score">1:17</span><span class="half">(0:10)</span></div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - Draken Brno "B"</span><span class="score">17:7</span><span class="half">(6:1)</span></div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - TJ Olbramovice</span><span class="score">22:12</span><span class="half">(10:7)</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - TJ Miroslav</span><span class="score">7:13</span><span class="half">(3:8)</span></div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - Draken Brno "A"</span><span class="score">14:28</span><span class="half">(6:17)</span></div>
+
+            <div class="round-title">2. kolo</div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - TJ Sokol Vracov</span><span class="score">2:15</span><span class="half">(1:8)</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - TJ Olbramovice</span><span class="score">11:23</span><span class="half">(2:14)</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - Draken Brno "B"</span><span class="score">18:6</span><span class="half">(14:5)</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - TJ Sokol Vracov</span><span class="score">3:15</span><span class="half">(2:9)</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - Draken Brno "A"</span><span class="score">12:18</span><span class="half">(6:9)</span></div>
+
+            <div class="round-title">3. kolo</div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - TJ Jiskra Humpolec "A"</span><span class="score">27:13</span><span class="half">(12:6)</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - TJ Jiskra Humpolec "A"</span><span class="score">11:22</span><span class="half">(5:10)</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - TJ Jiskra Humpolec "B"</span><span class="score">29:12</span><span class="half">(15:5)</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - TJ Jiskra Humpolec "B"</span><span class="score">21:16</span><span class="half">(12:7)</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - SK Autonot Jihlava</span><span class="score">18:10</span><span class="half">(9:6)</span></div>
+            <div class="match-result our-match"><span class="teams">TJ Sokol Vracov - 1. NH BRNO</span><span class="score">36:4</span><span class="half">(14:2)</span></div>
+
+            <div class="round-title">4. kolo</div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - TJ Jiskra Humpolec "A"</span><span class="score">6:17</span><span class="half">(1:9)</span></div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - TJ Sokol Vracov</span><span class="score">4:26</span><span class="half">(4:16)</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - TJ Olbramovice</span><span class="score">10:7</span><span class="half">(3:4)</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - TJ Jiskra Humpolec "B"</span><span class="score">8:12</span><span class="half">(5:7)</span></div>
+
+            <div class="round-title">5. kolo</div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - TJ Miroslav</span><span class="score future">—</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - SK Autonot Jihlava</span><span class="score">11:19</span><span class="half">(9:7)</span></div>
+
+            <div class="round-title">6. kolo</div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - SK Autonot Jihlava</span><span class="score">21:25</span><span class="half">(12:12)</span></div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - Draken Brno "B"</span><span class="score">26:4</span><span class="half">(11:2)</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - TJ Miroslav</span><span class="score">4:18</span><span class="half">(2:8)</span></div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - Draken Brno "A"</span><span class="score">13:12</span><span class="half">(7:6)</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - SK Autonot Jihlava</span><span class="score">13:8</span><span class="half">(6:4)</span></div>
+
+            <div class="round-title">7. kolo</div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - TJ Miroslav</span><span class="score">5:23</span><span class="half">(4:5)</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - Draken Brno "A"</span><span class="score">4:39</span><span class="half">(2:18)</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - TJ Olbramovice</span><span class="score">25:11</span><span class="half">(14:2)</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - TJ Jiskra Humpolec "A"</span><span class="score">5:13</span><span class="half">(2:6)</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - Draken Brno "B"</span><span class="score">18:22</span><span class="half">(8:11)</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - TJ Olbramovice</span><span class="score">12:17</span><span class="half">(8:9)</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - TJ Jiskra Humpolec "B"</span><span class="score">22:6</span><span class="half">(10:3)</span></div>
+        </div>
+
+        <div id="tab-jaro" class="tab-content">
+            <div class="round-title">Předehrávky</div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - Draken Brno "A"</span><span class="score future">—</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - TJ Jiskra Humpolec "A"</span><span class="score future">10. 4.</span></div>
+
+            <div class="round-title">8. kolo</div>
+            <div class="match-result"><span class="teams">TJ Miroslav - TJ Jiskra Humpolec "B"</span><span class="score future">3. 5.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - SK Autonot Jihlava</span><span class="score future">11. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - TJ Sokol Vracov</span><span class="score future">19. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - TJ Jiskra Humpolec "A"</span><span class="score future">3. 5.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - SK Autonot Jihlava</span><span class="score future">11. 4.</span></div>
+
+            <div class="round-title">9. kolo</div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - TJ Jiskra Humpolec "B"</span><span class="score future">12. 4.</span></div>
+            <div class="match-result our-match"><span class="teams">TJ Olbramovice - 1. NH BRNO</span><span class="score future">12. 4.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - TJ Miroslav</span><span class="score future">26. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - TJ Jiskra Humpolec "A"</span><span class="score future">12. 4.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - TJ Miroslav</span><span class="score future">26. 4.</span></div>
+
+            <div class="round-title">10. kolo</div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - Draken Brno "A"</span><span class="score future">25. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - Draken Brno "B"</span><span class="score future">25. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - Draken Brno "A"</span><span class="score future">25. 4.</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - Draken Brno "B"</span><span class="score future">25. 4.</span></div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - TJ Olbramovice</span><span class="score future">25. 4.</span></div>
+            <div class="match-result our-match"><span class="teams">1. NH BRNO - TJ Sokol Vracov</span><span class="score future">26. 4.</span></div>
+
+            <div class="round-title">11. kolo</div>
+            <div class="match-result our-match"><span class="teams">TJ Jiskra Humpolec "A" - 1. NH BRNO</span><span class="score future">17. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Sokol Vracov - SK Autonot Jihlava</span><span class="score future">17. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - TJ Miroslav</span><span class="score future">17. 5.</span></div>
+            <div class="match-result our-match"><span class="teams">TJ Jiskra Humpolec "B" - 1. NH BRNO</span><span class="score future">17. 5.</span></div>
+
+            <div class="round-title">12. kolo</div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - Draken Brno "A"</span><span class="score future">7. 6.</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - TJ Sokol Vracov</span><span class="score future">24. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Olbramovice - Draken Brno "B"</span><span class="score future">7. 6.</span></div>
+            <div class="match-result our-match"><span class="teams">SK Autonot Jihlava - 1. NH BRNO</span><span class="score future">7. 6.</span></div>
+
+            <div class="round-title">13. kolo</div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - TJ Jiskra Humpolec "B"</span><span class="score future">24. 5.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "B" - TJ Sokol Vracov</span><span class="score future">31. 5.</span></div>
+            <div class="match-result our-match"><span class="teams">TJ Miroslav - 1. NH BRNO</span><span class="score future">30. 5.</span></div>
+            <div class="match-result"><span class="teams">Draken Brno "A" - TJ Sokol Vracov</span><span class="score future">31. 5.</span></div>
+            <div class="match-result"><span class="teams">SK Autonot Jihlava - TJ Jiskra Humpolec "A"</span><span class="score future">24. 5.</span></div>
+
+            <div class="round-title">14. kolo</div>
+            <div class="match-result our-match"><span class="teams">Draken Brno "A" - 1. NH BRNO</span><span class="score future">24. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Miroslav - SK Autonot Jihlava</span><span class="score future">31. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "A" - TJ Olbramovice</span><span class="score future">31. 5.</span></div>
+            <div class="match-result our-match"><span class="teams">Draken Brno "B" - 1. NH BRNO</span><span class="score future">24. 5.</span></div>
+            <div class="match-result"><span class="teams">TJ Jiskra Humpolec "B" - TJ Olbramovice</span><span class="score future">31. 5.</span></div>
+        </div>
+
+        <div style="margin-top: 1rem;">
+            <a href="http://www.nhjmp.hys.cz/index.php?lvla=4&lvlb=1&lvlc=6" target="_blank" class="table-link">
+                Oficiální tabulka na nhjmp.hys.cz →
+            </a>
+        </div>
     </div>
 
     <script>
@@ -565,6 +879,14 @@
             if (n === 1) return 'sekunda';
             if (n >= 2 && n <= 4) return 'sekundy';
             return 'sekund';
+        }
+
+        // ── Tabs ──
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            event.target.classList.add('active');
         }
 
         // ── Init ──
