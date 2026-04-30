@@ -484,27 +484,6 @@
         }
 
         /* Injury overlay */
-        .injury-btn {
-            display: inline-block;
-            margin-top: 1.5rem;
-            padding: 0.5rem 1.2rem;
-            font-family: 'Russo One', sans-serif;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #df0000;
-            background: #fff;
-            border: 2px solid #df0000;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .injury-btn:hover {
-            background: #df0000;
-            color: #fff;
-        }
-
         .injury-overlay {
             display: none;
             position: fixed;
@@ -836,8 +815,6 @@
                 Oficiální tabulka na nhjmp.hys.cz →
             </a>
         </div>
-
-        <button class="injury-btn" onclick="activateInjury()">Zranění kolene</button>
     </div>
 
     <div class="injury-overlay" id="injury-overlay">
@@ -1166,14 +1143,9 @@
         }
 
         // ── Init ──
-        updateTrainingCountdown();
-        updateMatchCountdown();
         renderSchedule();
         renderUpdateStatus();
-        countdownInterval = setInterval(() => {
-            updateTrainingCountdown();
-            updateMatchCountdown();
-        }, 1000);
+        activateInjury();
     </script>
 </body>
 </html>
