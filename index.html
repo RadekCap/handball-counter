@@ -208,6 +208,34 @@
             letter-spacing: 0.5px;
         }
 
+        .schedule-table tr.cancelled-match td {
+            text-decoration: line-through;
+            color: #afafaf;
+        }
+
+        .cancelled-badge {
+            display: inline-block;
+            background: #707070;
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            margin-left: 0.3rem;
+            vertical-align: middle;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .match-result.cancelled-match .teams {
+            text-decoration: line-through;
+            color: #afafaf;
+        }
+
+        .match-result.cancelled-match .score {
+            color: #afafaf;
+        }
+
         .table-link {
             display: inline-block;
             font-size: 0.85rem;
@@ -779,7 +807,7 @@
             <div class="match-result" data-date="2026-04-25"><span class="teams">TJ Jiskra Humpolec "B" - Draken Brno "A"</span><span class="score future">25. 4.</span></div>
             <div class="match-result" data-date="2026-04-25"><span class="teams">TJ Jiskra Humpolec "B" - Draken Brno "B"</span><span class="score future">25. 4.</span></div>
             <div class="match-result" data-date="2026-04-25"><span class="teams">SK Autonot Jihlava - TJ Olbramovice</span><span class="score future">25. 4.</span></div>
-            <div class="match-result our-match" data-date="2026-04-26"><span class="teams">1. NH BRNO - TJ Sokol Vracov</span><span class="score future">26. 4.</span></div>
+            <div class="match-result our-match cancelled-match" data-date="2026-04-26"><span class="teams">1. NH BRNO - TJ Sokol Vracov</span><span class="score">ZRUŠENO</span></div>
 
             <div class="round-title">11. kolo</div>
             <div class="match-result our-match" data-date="2026-05-17"><span class="teams">TJ Jiskra Humpolec "A" - 1. NH BRNO</span><span class="score future">17. 5.</span></div>
@@ -848,7 +876,7 @@
         // ── Match schedule data ──
         const MATCHES = [
             { date: '2026-04-12', time: '13:45', day: 'neděle', home: 'TJ Olbramovice', away: '1. NH BRNO' },
-            { date: '2026-04-26', time: '13:45', day: 'neděle', home: '1. NH BRNO', away: 'TJ Sokol Vracov' },
+            { date: '2026-04-26', time: '13:45', day: 'neděle', home: '1. NH BRNO', away: 'TJ Sokol Vracov', cancelled: true },
             { date: '2026-05-17', time: '08:00', day: 'neděle', home: 'TJ Jiskra Humpolec A', away: '1. NH BRNO' },
             { date: '2026-05-17', time: '11:45', day: 'neděle', home: 'TJ Jiskra Humpolec B', away: '1. NH BRNO' },
             { date: '2026-05-24', time: '13:15', day: 'neděle', home: 'Draken Brno A', away: '1. NH BRNO' },
@@ -950,6 +978,7 @@
             const pragueNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Prague' }));
 
             for (const match of MATCHES) {
+                if (match.cancelled) continue;
                 const matchTime = getMatchDateTime(match);
                 if (matchTime > pragueNow) {
                     return { match, matchTime, pragueNow };
@@ -1007,8 +1036,13 @@
                 const isHome = match.home === '1. NH BRNO';
 
                 const tr = document.createElement('tr');
-                if (isPast) tr.classList.add('past-match');
-                if (isNext) tr.classList.add('next-match-row');
+                if (match.cancelled) {
+                    tr.classList.add('cancelled-match');
+                } else if (isPast) {
+                    tr.classList.add('past-match');
+                } else if (isNext) {
+                    tr.classList.add('next-match-row');
+                }
 
                 const dateFormatted = matchTime.toLocaleDateString('cs-CZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
@@ -1026,7 +1060,12 @@
 
                 const tdTeams = document.createElement('td');
                 tdTeams.textContent = match.home + ' - ' + match.away;
-                if (isHome) {
+                if (match.cancelled) {
+                    const badge = document.createElement('span');
+                    badge.className = 'cancelled-badge';
+                    badge.textContent = 'ZRUŠENO';
+                    tdTeams.appendChild(badge);
+                } else if (isHome) {
                     const badge = document.createElement('span');
                     badge.className = 'home-badge';
                     badge.textContent = 'DOMA';
