@@ -482,6 +482,112 @@
                 white-space: normal;
             }
         }
+
+        /* Injury overlay */
+        .injury-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.5rem 1.2rem;
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #df0000;
+            background: #fff;
+            border: 2px solid #df0000;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .injury-btn:hover {
+            background: #df0000;
+            color: #fff;
+        }
+
+        .injury-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .injury-overlay.active {
+            display: flex;
+        }
+
+        .injury-content {
+            text-align: center;
+            animation: injuryFadeIn 0.5s ease;
+        }
+
+        .injury-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 2rem;
+            color: #df0000;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 2rem;
+            animation: injuryPulse 1.5s ease-in-out infinite;
+        }
+
+        .injury-subtitle {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1rem;
+            color: #afafaf;
+            margin-top: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .injury-dismiss {
+            margin-top: 2.5rem;
+            padding: 0.7rem 2rem;
+            font-family: 'Russo One', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            background: #df0000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .injury-dismiss:hover {
+            opacity: 0.8;
+        }
+
+        .injury-knee {
+            filter: drop-shadow(0 0 15px rgba(223, 0, 0, 0.4));
+        }
+
+        @keyframes injuryFadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes injuryPulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(223, 0, 0, 0.3); }
+            50% { opacity: 0.7; text-shadow: 0 0 20px rgba(223, 0, 0, 0.6); }
+        }
+
+        @media (max-width: 500px) {
+            .injury-title {
+                font-size: 1.4rem;
+                letter-spacing: 2px;
+            }
+            .injury-knee {
+                width: 140px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -729,6 +835,35 @@
             <a href="http://www.nhjmp.hys.cz/index.php?lvla=4&lvlb=1&lvlc=6" target="_blank" class="table-link">
                 Oficiální tabulka na nhjmp.hys.cz →
             </a>
+        </div>
+
+        <button class="injury-btn" onclick="activateInjury()">Zranění kolene</button>
+    </div>
+
+    <div class="injury-overlay" id="injury-overlay">
+        <div class="injury-content">
+            <div class="injury-title">Zranění kolene!</div>
+            <svg class="injury-knee" viewBox="0 0 200 280" width="180" xmlns="http://www.w3.org/2000/svg">
+                <rect x="70" y="0" width="60" height="110" rx="20" fill="#fde0c0" stroke="#303030" stroke-width="2"/>
+                <rect x="70" y="150" width="60" height="130" rx="20" fill="#fde0c0" stroke="#303030" stroke-width="2"/>
+                <circle cx="100" cy="130" r="35" fill="#fdd0a0" stroke="#303030" stroke-width="2"/>
+                <line x1="70" y1="105" x2="130" y2="155" stroke="#df0000" stroke-width="8" stroke-linecap="round"/>
+                <line x1="130" y1="105" x2="70" y2="155" stroke="#df0000" stroke-width="8" stroke-linecap="round"/>
+                <circle cx="45" cy="120" r="5" fill="#df0000" opacity="0.6">
+                    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="155" cy="140" r="5" fill="#df0000" opacity="0.6">
+                    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="50" cy="150" r="3" fill="#df0000" opacity="0.4">
+                    <animate attributeName="opacity" values="0.4;0.1;0.4" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="150" cy="110" r="3" fill="#df0000" opacity="0.4">
+                    <animate attributeName="opacity" values="0.1;0.4;0.1" dur="1.5s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+            <div class="injury-subtitle">Odpočívám...</div>
+            <button class="injury-dismiss" onclick="dismissInjury()">Pokračovat</button>
         </div>
     </div>
 
@@ -1009,12 +1144,33 @@
             }
         }
 
+        // ── Injury overlay ──
+        let countdownInterval = null;
+
+        function activateInjury() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            document.getElementById('injury-overlay').classList.add('active');
+        }
+
+        function dismissInjury() {
+            document.getElementById('injury-overlay').classList.remove('active');
+            updateTrainingCountdown();
+            updateMatchCountdown();
+            countdownInterval = setInterval(() => {
+                updateTrainingCountdown();
+                updateMatchCountdown();
+            }, 1000);
+        }
+
         // ── Init ──
         updateTrainingCountdown();
         updateMatchCountdown();
         renderSchedule();
         renderUpdateStatus();
-        setInterval(() => {
+        countdownInterval = setInterval(() => {
             updateTrainingCountdown();
             updateMatchCountdown();
         }, 1000);
